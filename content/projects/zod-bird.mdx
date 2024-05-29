@@ -1,17 +1,11 @@
 ---
 title: "VITS-fast-fine-tuning 训练自己的声音"
-description: 这个代码库将指导您在不到1小时的时间内将您自己的角色声音，甚至是您自己的声音，添加到现有的VITS TTS模型中，使其能够执行以下任务
-This repo will guide you to add your own character voices, or even your own voice, into existing VITS TTS model to make it able to do the following tasks in less than 1 hour
-repository: Plachtaa/VITS-fast-fine-tuning
+description: 这个代码库将指导您在不到1小时的时间内将您自己的角色声音，甚至是您自己的声音，添加到现有的VITS TTS模型中，使其能够执行以下任务。
+repository: chronark/zod-bird
 date: "2023-12-01"
 published: true
   
 ---
-
-### 参考
-
-参看本地训练：https://github.com/Plachtaa/VITS-fast-fine-tuning/blob/main/LOCAL.md
-参考演示： https://huggingface.co/spaces/kira4424/VITS-fast-fine-tuning
 
 - typesafe
 - handles building the url params for you
@@ -20,159 +14,39 @@ published: true
 - built in retry logic for ratelimited requests
 
 
-```ts
-import { Tinybird } from "@chronark/zod-bird";
-import { z } from "zod";
-
-const tb = new Tinybird({ token: "token" });
-
-export const getEvents = tb.buildPipe({
-  pipe: "get_events__v1",
-  parameters: z.object({
-    tenantId: z.string(),
-  }),
-  data: z.object({
-    event: z.string(),
-    time: z.number().transform((t) => new Date(t)),
-  }),
-});
-
-
-const res = await getEvents({ tenantId: "chronark" })
-
-// res.data = {event: string, time: Date}[]
-```
-
+## Refer to
+- 参看本地训练：https://github.com/Plachtaa/VITS-fast-fine-tuning/blob/main/LOCAL.md
+- 参考演示： https://huggingface.co/spaces/kira4424/VITS-fast-fine-tuning
 ## Install
 
 ```
-npm i @chronark/zod-bird
+pyenv virtualenv 3.10.6 vits
+pyenv activate vits
+git clone https://github.com/Plachtaa/VITS-fast-fine-tuning.git
+pip install -r requirements.txt
+pip install torch==2.1.0 torchvision==0.16.0 torchaudio==2.1.0 --index-url https://download.pytorch.org/whl/cu118
+
+
+Uninstalling torchaudio-2.1.0:
+Successfully uninstalled torchaudio-2.1.0
+Successfully installed cmake-3.25.0 lit-15.0.7 torch-2.0.0+cu118 torchaudio-2.0.1+cu118 torchvision-0.15.1+cu118 triton-2.0.0
+
+
+cp exam1.c /usr/ wang/
+python scripts/video2audio.py python scripts/denoise_audio
+python scripts/long_audio_transcribe.py --languages "{C}" --whisper_size large
+python scripts/short_audio_transcribe.py --languages "{C}" --whisper_size large
+python scripts/resample.pypython preprocess_v2.py --languages "{C}"
+
+
+python finetune_speaker_v2.py -m ./OUTPUT_MODEL --max_epochs "{3000}" --drop_speaker_embed True
+tensorboard --logdir=./OUTPUT_MODEL
+cp ./configs/modified_finetune_speaker.json ./finetune_speaker.json
+python VC_inference.py --model_dir ./OUTPUT_MODEL/G_latest.pth --share True
 ```
-
-
-## Ingesting Data
-
-```ts
-// lib/tinybird.ts
-import { Tinybird } from "./client";
-import { z } from "zod";
-
-const tb = new Tinybird({ token: process.env.TINYBIRD_TOKEN! });
-
-export const publishEvent = tb.buildIngestEndpoint({
-  datasource: "events__v1",
-  event: z.object({
-    id: z.string(),
-    tenantId: z.string(),
-    channelId: z.string(),
-    time: z.number().int(),
-    event: z.string(),
-    content: z.string().optional().default(""),
-    metadata: z.string().optional().default(""),
-  }),
-});
-```
-
-```ts
-// somewhere.ts
-import { publishEvent } from "./lib/tinybird";
-
-await publishEvent({
-  id: "1",
-  tenantId: "1",
-  channelId: "1",
-  time: Date.now(),
-  event: "test",
-  content: "test",
-  metadata: JSON.stringify({ test: "test" }),
-});
-```
-
-
-
-## Querying Endpoints
-
-```ts
-// lib/tinybird.ts
-import { Tinybird } from "./client";
-import { z } from "zod";
-
-const tb = new Tinybird({ token: process.env.TINYBIRD_TOKEN! });
-
-export const getChannelActivity = tb.buildPipe({
-  pipe: "get_channel_activity__v1",
-  parameters: z.object({
-    tenantId: z.string(),
-    channelId: z.string().optional(),
-    start: z.number(),
-    end: z.number().optional(),
-    granularity: z.enum(["1m", "1h", "1d", "1w", "1M"]),
-  }),
-  data: z.object({
-    time: z.string().transform((t) => new Date(t).getTime()),
-    count: z
-      .number()
-      .nullable()
-      .optional()
-      .transform((v) => (typeof v === "number" ? v : 0)),
-  }),
-});
-```
-
-```ts
-// somewhere.ts
-import { getChannelActivity } from "./lib/tinybird";
-
-
-const res = await getChannelActivity({
-   tenantId: "1",
-   channelId: "1",
-   start: 123,
-   end: 1234,
-   granularity: "1h"
-})
-
-```
-`res` is the response from the tinybird endpoint, but now fully typed and the data has been parsed according to the schema defined in `data`.
-
-## Advanced
-
-### Caching
+## Installation Process
 
 You can add cache directives to each pipe.
 
 
-#### Disable caching (useful in Next.js where everything is cached by default)
 
-```ts
-tb.buildPipe({
-  pipe: "some_pipe__v1",
-  parameters: z.object({
-   hello: z.string()
-  }),
-  data: z.object({
-    response: z.string()
-  }),
-   opts: {
-      cache: "no-store" // <-------- Add this
-   };
-});
-
-```
-
-#### Cache for 15 minutes
-
-```ts
-
-tb.buildPipe({
-  pipe: "some_pipe__v1",
-  parameters: z.object({
-   hello: z.string()
-  }),
-  data: z.object({
-    response: z.string()
-  }),
-   opts: {
-      revalidate: 900 ;// <-------- Add this
-    };
-});
