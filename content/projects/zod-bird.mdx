@@ -7,13 +7,6 @@ published: true
   
 ---
 
-- typesafe
-- handles building the url params for you
-- easy transformation of resulting data
-- built in cache directives for nextjs
-- built in retry logic for ratelimited requests
-
-
 ## Refer to
 - 参看本地训练：https://github.com/Plachtaa/VITS-fast-fine-tuning/blob/main/LOCAL.md
 - 参考演示： https://huggingface.co/spaces/kira4424/VITS-fast-fine-tuning
@@ -26,19 +19,23 @@ git clone https://github.com/Plachtaa/VITS-fast-fine-tuning.git
 pip install -r requirements.txt
 pip install torch==2.1.0 torchvision==0.16.0 torchaudio==2.1.0 --index-url https://download.pytorch.org/whl/cu118
 
-
+```
+```
 Uninstalling torchaudio-2.1.0:
 Successfully uninstalled torchaudio-2.1.0
 Successfully installed cmake-3.25.0 lit-15.0.7 torch-2.0.0+cu118 torchaudio-2.0.1+cu118 torchvision-0.15.1+cu118 triton-2.0.0
 
-
+```
+```
 cp exam1.c /usr/ wang/
 python scripts/video2audio.py python scripts/denoise_audio
 python scripts/long_audio_transcribe.py --languages "{C}" --whisper_size large
 python scripts/short_audio_transcribe.py --languages "{C}" --whisper_size large
 python scripts/resample.pypython preprocess_v2.py --languages "{C}"
 
+```
 
+```
 python finetune_speaker_v2.py -m ./OUTPUT_MODEL --max_epochs "{3000}" --drop_speaker_embed True
 tensorboard --logdir=./OUTPUT_MODEL
 cp ./configs/modified_finetune_speaker.json ./finetune_speaker.json
@@ -46,7 +43,7 @@ python VC_inference.py --model_dir ./OUTPUT_MODEL/G_latest.pth --share True
 ```
 ## Installation Process
 
-You can add cache directives to each pipe.
+You can follow the next steps to install the repo.
 
 
 
