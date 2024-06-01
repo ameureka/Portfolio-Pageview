@@ -8,19 +8,280 @@ repository: "chronark/highstorm"
   
 ---
 
+![Planetfall Logo](https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEjSTCGGvWT2QiBGod-tawBJ8m1VsIlN8Iai1flfS0Pmj6rSi6Ww0PELbYoHGP_MQqEV-215aWmkd6LZNfxCI91blNaw_jAM0ld7y3dX9X3v6SeCS1v5oplMoX6buk8AYbp3lcKetD-DcrAzmTSHOIT3WXOt-ZnwLvD-xe0Sswt5xIp2khyphenhyphendUFbacI4vMRw/w640-h360-rw/v2-cecdc77548cb74ed42a349a05fb3710e_720w.jpg)
 
- [![](https://highstorm.app/og.png)](https://highstorm.app) 
 
-Reduce the noise in your Slack workspace by consolidating all your event data into one place, filtering alerts by relevance, and customizing your alert settings to suit your needs.
+### 1.0 查看硬件信息
+对于新机器首先是需要确定硬件显卡以及确定需要安装的驱动，然后安装CUDA ，最后安装cuDNN ，如果有驱动要卸载旧有的驱动文件，避免产生冲突。
+使用 "lshw" 命令： 打开终端，并输入以下命令并按 Enter 键：
+```ts
+```
+sudo lshw -C display
+这将显示关于你的显示适配器的详细信息，包括制造商、型号和驱动程序等信息。
 
-###### Consolidate Events
-Get all your event data in one place to reduce alert noise
+![Planetfall Logo](https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEg1oHj_37IS7x6Z9FNpbhoLBq-SZ4fjCgNyvp_Vun_YrsnyKfDDswCCQDlS04bAsGrkbRFfn-uvZMzXzIErtIDTCMMzM6e96FhILZ0TKqsQL3Ab2-_IeUmiDIBLh1r924HIMkbbYKYlUx90BMVzc0J8IcEBQwZND8RM3OyuDYwxXbT7IsoLvwZ0yEgiGeI/w640-h404-rw/WX20231018-003254.png)
 
-###### Stay Focused
-Keep your Slack workspace focused on what's important
+根据输出，你的系统中有一块 Cirrus Logic 显示适配器和一块 NVIDIA 显示适配器。然而，NVIDIA 显示适配器的驱动程序似乎没有被正确识别或加载，它被标记为 "UNCLAIMED"。如果你希望使用 NVIDIA 显卡，你需要安装适当的 NVIDIA 驱动程序。你可以使用 "nvidia-smi" 命令来查看系统中是否已安装 NVIDIA 驱动程序。
 
-###### Customizable Settings
-Customize your alert settings to suit your unique needs
+### 2.0 查看CUDA 版本以及卸载旧版本
+至于查看CUDA版本，有几种方法可以做到。最直接的方法是检查CUDA的安装目录。例如，如果你的CUDA安装在/usr/local/cuda，你可以通过查看该目录下的版本文件来找到CUDA的版本。
 
-###### Clear Overview
-Get a clear overview of all your alerts in one place
+![Planetfall Logo](https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEjRY2A38WrND3UYbyn5AUc6b6n0eBprbkoyr1cs_nSZv6KTVhvOMbQ6z45VmjW81KYPZpG-gZJb8DS13ilpuEwQANALq_V21JkyioTzQl2A6lYGdgU3X4u4mG8tIrknIF9SvFrbRA6UFHhJ1T6vHRdqxEo2HdqCCJDI9IgyB3HuVnD8UBtKMRdgdFjs2ww/w640-h110-rw/WX20231018-010441.png)
+
+要卸载旧版本的CUDA并安装新的CUDA 11.8，你可以按照以下步骤进行：
+卸载旧版本的CUDA：
+在终端中，运行以下命令以卸载旧版本的CUDA：
+```ts
+sudo apt-get --purge remove 'cuda*'
+```
+
+
+这将卸载所有与CUDA相关的软件包，包括旧版本的CUDA工具包和驱动程序。
+卸载之后，我们发现还存在cuda 文件夹，这个时候我们首先验证下是否真的卸载了
+
+确认卸载：确保你已经完全卸载了旧版本的CUDA。你可以运行以下命令来验证： 
+```ts
+which nvcc
+```
+
+如果它返回空，表示CUDA已经被卸载。如果它仍然返回路径，说明CUDA可能没有完全卸载，你需要再次检查和执行卸载步骤。
+
+![Planetfall Logo](https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEi8ZvfkaECM5J8AQAxJZMNRMiZ95arYOvJ6hvMCvxF4mZ83ZGCxK_YDY_rhP0N65a_34_VLhRIchmyig7xaBmDfM3o2_ESDwEXyDsAC_zwFGj1DyFGLyE_cjehKIS-3tD9yHw71NB34ooRlSJ5T3juZf2xkFdxxmSLUZMMEr1W3HsrcrlECfhDga4_soKQ/w640-h108-rw/WX20231018-011506.png)
+```ts
+sudo rm -rf /usr/local/cuda
+sudo rm -rf /usr/local/cuda-11.0
+```
+
+
+手动删除
+
+![Planetfall Logo](https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEiKnsibmkb2lNe-m8RC0AYYBs-2Fb6uUXTCIl0iEObrVKneJlR9ON0l7kF0EUX5uFnVCaSIJlRa5KriRplLqchU3T3Yw0yLCob6nEzEV2k2Cj7wBauqKhIxnStL3COHKTKxKGBGRbhpR03H95jpJA-Zqt3vDf4G27Hn0KvJJ8WOK3QXkFInu5xhJEInIco/w640-h104-rw/WX20231018-011726.png)
+我们重新卸载了cuda 以及驱动以及英伟达的驱动，重新安装。
+
+### 3.0 安装驱动
+一般来说在安装CUDA的时候驱动会自动更新，目前我们直接的安装CUDA
+
+### 4.0 安装CUDA-（注意最好安装在数据盘之中）
+这里主要针对驱动已经安装好了的环境，如何安装合适的显卡驱动这里不多赘述，本文演示的系统为Ubuntu18.04，但理论上其他Linux发行版操作类似
+安装新的CUDA 11.8：
+下载CUDA 11.8的安装包并按照官方安装说明来进行安装。你可以从NVIDIA的官方网站下载适合你系统的CUDA Toolkit。通常，你需要运行下载的安装脚本来安装CUDA。请确保按照NVIDIA提供的安装文档来进行安装。
+
+###### 当然你可以查看适配的驱动的版本以及的CUDA的版本
+Refer to the following instructions for installing CUDA on Linux, including the CUDA driver and toolkit: NVIDIA CUDA Installation Guide for Linux.
+
+![Planetfall Logo](https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEjC9i8a-ajscSmGNcA1BSbDgaoLTT_zthvnv6d3XMx32SFKow3Oxa6job-iDvpmKyYH39kIqTlWAV1AzAIKQasTi2I16jzku_mH0PDcDyFOoUPeWdamSWv3gsJUnAecpsmFws2c9-9nnw6tG3wy-kSn-F6M9RMQKBDeIbF6iYqWvel1l7X8pSjHpPV4Eeg/w640-h316-rw/WX20231018-012252.png)
+
+###### 这里我们安装是CUDA 11.8 安装链接文件如下：
+https://developer.nvidia.com/cuda-11-8-0-download-archive?target_os=Linux&target_arch=x86_64&Distribution=Ubuntu&target_version=18.04&target_type=deb_local
+
+###### 安装指导过程：
+wget https://developer.download.nvidia.com/compute/cuda/repos/ubuntu1804/x86_64/cuda-ubuntu1804.pin
+sudo mv cuda-ubuntu1804.pin /etc/apt/preferences.d/cuda-repository-pin-600
+wget https://developer.download.nvidia.com/compute/cuda/11.8.0/local_installers/cuda-repo-ubuntu1804-11-8-local_11.8.0-520.61.05-1_amd64.deb
+```ts
+sudo dpkg -i cuda-repo-ubuntu1804-11-8-local_11.8.0-520.61.05-1_amd64.deb
+sudo cp /var/cuda-repo-ubuntu1804-11-8-local/cuda-*-keyring.gpg /usr/share/keyrings/
+sudo apt-get update
+sudo apt-get -y install cuda
+```
+
+
+待计算机启动完成，在终端中输入如下指令nvidia-smi 验证CUDA安装结果。
+nvcc -V检查cuda安装是否成功，如下图则表示安装成功。
+
+![Planetfall Logo](https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEh8vqmto5nwoVkMptuu6_r1RNlku7_DfCR9DNgVFSInueUXw8hteizqriNWkWFyyqxiq5xVYzsGG7EkCvTwsSYjyWym1txxePkC-gqo0MM_FsJ1nl-3HgTd2BXDVgZq3hLtBQFxumjACK4-oqqOELY_IF_8qQgU5MyOp1j-kLUxYtd-s5nmnF4aI5VlVoI/w640-h445-rw/WX20231018-014154.png)
+
+你可以使用 nvcc -V 命令来验证CUDA版本。但在你的情况下，可能是因为 nvcc 的路径没有添加到你的环境变量中，所以系统找不到 nvcc。你可以尝试执行以下命令来添加CUDA到你的环境变量中：
+```ts
+export PATH=$PATH:/usr/local/cuda/bin
+```
+
+这将把CUDA的 bin 目录添加到你的路径中，允许你使用 nvcc 命令。
+在添加了环境变量后，再次运行 nvcc -V 应该显示CUDA的版本信息。
+如果你之后需要使用CUDA进行开发或编译CUDA程序，确保你的环境变量已经正确配置，以便使用CUDA工具。
+
+![Planetfall Logo](https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEiZCZviZh7-HdfnoEsva8urwf1MydPJAfEDakqyS8vWp5vHmBm1L43iKsaFo-KONSuvfZD3honlzEWzeYpZTraJ4sK-CA7RWtD8lx-mAzuNqLpoZECdsjYuCxdRJfDQfWY8raShPln6oEJ_sCUMN68rsvYyNK8bLbI8LFTkROGI3UT8rI93wfoUaJVcRMA/w640-h164-rw/WX20231018-014347.png)
+
+验证用户环境是否配置正确，输出nvcc的版本信息即为安装成功which nvcc nvcc -V
+
+当环境之中有多个cuda 版本的时候需要注意其中的配置文件
+```ts
+sudo vim ~/.bashrc
+export PATH=$PATH:/usr/local/cuda-11.8/bin
+export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:/usr/local/cuda-11.8/lib64
+source ~/.bashrc
+```
+
+
+
+### 5.0 安装cuDNN
+根据CUDA 安装的版本：
+NVIDIA-SMI 520.61.05 Driver Version: 520.61.05 CUDA Version: 11.8
+文件地址：https://drive.google.com/file/d/1cevhHXMhuLYPAdjtcWjx2k5Md6wEfg5I/view?usp=drive_link
+cuDNN同样提供了多种安装方式。这里与CUDA一样选择deb方式。注意cuDNN的版本需要与CUDA版本匹配。如果你需要编译TensorFlow或者PyTorch，安装开发时库，否则安装运行时库即可。
+
+Debian Local Installation
+
+Download the Debian local repository installation package. Before issuing the following commands, you must replace X.Y and 8.x.x.x with your specific CUDA and cuDNN versions.
+
+your CUDA directory path is referred to as /usr/local/cuda/
+your cuDNN download path is referred to as <cudnnpath>
+
+1.0 Navigate to your downloads directory containing the cuDNN Debian local installer file.
+2.0 Enable the local repository.
+```ts
+sudo dpkg -i cudnn-local-repo-$distro-8.x.x.x_1.0-1_amd64.deb
+```
+
+例如：
+```ts
+sudo dpkg -i cudnn-local-repo-ubuntu1804-8.9.3.28_1.0-1_amd64.deb
+Where $distro is ubuntu1804, ubuntu2004, ubuntu2204, or debian11.
+```
+
+3.0 Import the CUDA GPG key.
+```ts
+sudo cp /var/cudnn-local-repo-*/cudnn-local-*-keyring.gpg /usr/share/keyrings/
+```
+
+4.0 Refresh the repository metadata.
+```ts
+sudo apt-get update
+```
+
+5.0 Install the runtime library.
+```ts
+sudo apt-get install libcudnn8=8.x.x.x-1+cudaX.Y
+```
+
+例如：
+这里要注意经过测试是下面
+```ts
+sudo apt-get install libcudnn8=8.9.3.28-1+cuda11.8
+```
+
+6.0 Install the developer library.
+```ts
+sudo apt-get install libcudnn8-dev=8.x.x.x-1+cudaX.Y
+```
+
+例如：
+```ts
+sudo apt-get install libcudnn8-dev=8.9.3.28-1+cuda11.8
+```
+
+7.0 Install the code samples.
+```ts
+sudo apt-get install libcudnn8-samples=8.x.x.x-1+cudaX.Y
+```
+
+例如：
+```ts
+sudo apt-get install libcudnn8-samples=8.9.3.28-1+cuda11.8
+```
+
+
+### 6.0 验证 cuDNN 是否安装正确
+```ts
+cp -r /usr/src/cudnn_samples_v8/ $HOME
+cd $HOME/cudnn_samples_v8/mnistCUDNN
+To verify that cuDNN is installed and is running properly, compile the mnistCUDNN sample located in the /usr/src/cudnn_samples_v8 directory in the Debian file.Copy the cuDNN samples to a writable path.
+Compile the mnistCUDNN sample.
+make clean && make
+Run the mnistCUDNN sample.
+./mnistCUDNN
+If cuDNN is properly installed and running on your Linux system, you will see a message similar to the following:
+Test passed!
+```
+
+
+### 7.0 验证 cuDNN 配置文件修改
+
+另外需要注意的对于cuDNN 也需要知道其中路径以及配置文件
+https://blog.kala.love/posts/868a5118/
+export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:/usr/local/cuda/lib64
+要确保将CUDNN库文件的路径添加到LD_LIBRARY_PATH环境变量中，可以执行以下步骤：
+确定CUDNN库的路径：首先，查找已安装的CUDNN库的路径。通常，CUDNN库位于/usr/local/cuda/lib64/或类似的目录中。
+您可以使用find命令来查找它，例如：
+```ts
+find /usr/ -name libcudnn.so*
+```
+
+这将列出所有libcudnn库文件的路径。
+设置LD_LIBRARY_PATH环境变量：要将CUDNN库文件的路径添加到LD_LIBRARY_PATH环境变量中，可以在shell配置文件（如.bashrc或.bash_profile）中添加一行。使用文本编辑器打开配置文件，例如：
+
+```ts
+nano ~/.bashrc
+```
+
+添加以下行，将/path/to/cudnn替换为您找到的CUDNN库文件的实际路径：
+
+```ts
+export LD_LIBRARY_PATH=/path/to/cudnn:$LD_LIBRARY_PATH
+```
+
+保存并关闭文件。
+使更改生效：为了确保更改生效，可以运行以下命令：
+```ts
+source ~/.bashrc
+```
+
+这将重新加载shell配置文件。
+验证更改：要验证LD_LIBRARY_PATH已更新，您可以运行以下命令：
+```ts
+echo $LD_LIBRARY_PATH
+```
+
+
+
+#### 00-11 关于报错的处理
+
+根据您提供的输出，编译mnistCUDNN示例时出现了以下错误：plaintextCopy code
+test.c:1:10: fatal error: FreeImage.h: No such file or directory #include "FreeImage.h"
+这是由于缺少FreeImage库引起的。mnistCUDNN示例依赖于FreeImage库，但系统找不到它。
+为了解决此问题，您需要安装FreeImage库。您可以尝试以下步骤：
+安装FreeImage库：
+```ts
+sudo apt-get install libfreeimage-dev
+```
+
+这将安装FreeImage库及其开发文件。
+重新编译mnistCUDNN示例：
+在/home/ubuntu/cudnn_samples_v8/mnistCUDNN目录下执行以下命令重新编译示例：
+```ts
+sudo make clean && make
+```
+
+这将使用FreeImage库重新编译mnistCUDNN示例。
+如果编译成功，您应该能够运行mnistCUDNN示例。如果您遇到其他问题，请提供更多详细信息以获取进一步的帮助。
+
+
+#### 00-12 关于驱动版本更新
+
+请注意，安装 NVIDIA 驱动程序可能需要一些额外的步骤，具体取决于你的系统和显卡型号。你可以查阅官方 NVIDIA 网站或使用 Ubuntu 提供的附加驱动程序工具来安装适当的驱动程序。
+安装NVIDIA驱动程序：
+你可以使用以下命令来安装NVIDIA驱动程序（确保你的系统已连接到互联网）：
+```ts
+sudo ubuntu-drivers autoinstall
+```
+![Planetfall Logo](https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEiDZvp1lJ0x1kd40wvHZBNCHOZgFElvuYRyDoqFWYcBHqNEiG1gvW3IMEc6okTXM1Volkp8dQ4wsByQQIEUTmVnRenKh6pRuFXIo2ZdflDFZ2zMaSCk0-_NnyHGSfUbyjaDf0e5VgIq5kVdm5h7pvCyPmddtVsDX9vA5pN05CtLPRL9tphVrfO74mnN5JM/w640-h360-rw/WX20231018-004517.png)
+
+
+
+#### 可以看到驱动版本太低，不支持cuda 11.8 需要升级
+
+![Planetfall Logo](https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEimfkLHpZdSEn-f0bv5oPGAzVtqtORQ4vyFux1-zqkawRfnBEcHYSc_yHM_7FZwbsfQ_7UK0J_Jq7Y8Oe00_ifgHeE0vr65mjFp0x3BKNCzijtBG2b8nRH4uxV_VfSw1KogjgG78rMJrF-_xhCBG8y4JpobisESUkwQ5J-bnhtfYkWGFzhhhE6jmhUtYqE/w640-h263-rw/WX20231018-005432.png)
+
+检查可用的驱动程序：
+首先，你可以使用以下命令来列出可用的NVIDIA驱动程序版本
+```ts
+ubuntu-drivers list
+```
+![Planetfall Logo](https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEinPhi5n6ks_J0MRxdO1Ka_morR-OYi9SBDE79pY1hp2A72cxRCJ2fHgUgj-f6APskfM_75_1w8BjZhioyQlIUIR9U3ions__Et-4TdKXhaKeCphQiwuEtU1R-sdnT7lEUo6aoC0YnmTg7Fnrmm3_RHtjixeANRgT81_V8qkovdS76JpzdaQnFbcDg7cws/w640-h140-rw/WX20231018-005533.png)
+
+
+如果你要安装特定版本的驱动程序，可以使用命令 sudo apt install nvidia-driver-版本号，将 "版本号" 替换为你希望安装的版本号。
+```ts
+sudo apt install nvidia-driver-525
+```
+
