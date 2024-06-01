@@ -18,19 +18,34 @@ FFmpeg : 预先安装好FFmpeg
 下载地址：FFmpeg官网。根据你的操作系统，按照官网说明安装好，注意，FFmpeg要加入环境变量设置，便于在任意目录调用。
 查找 FFmpeg 可执行文件的路径：
 如果默认安装，可以使用以下命令找到
+```ts
 which ffmpeg
 /usr/bin/ffmpeg
+```
+
 编辑 .bashrc 文件：
 打开你的用户主目录下的 .bashrc 文件。你可以使用任何文本编辑器，比如 nano：
 在文件末尾添加路径：
 在 .bashrc 文件的末尾，添加以下行，将其中的 /path/to/ffmpeg 替换为你找到的 FFmpeg 可执行文件的实际路径：
+```ts
 export PATH=$PATH:/usr/bin/ffmpeg
+```
+
 保存并关闭文件。
 使更改生效：
 在终端中运行以下命令，使更改立即生效：
+```ts
 source ~/.bashrc
+```
 或者可以重新启动终端窗口。
 现在，你应该能够在任何目录中通过简单地运行 ffmpeg 命令来调用 FFmpeg。
+
+
+
+
+
+
+
 
 参考安装教程官方：
 https://github.com/numz/sd-wav2lip-uhq/blob/main/README_CN.md#-%E5%AE%89%E8%A3%85%E8%AF%B4%E6%98%8E
