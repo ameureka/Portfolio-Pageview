@@ -12,7 +12,7 @@ published: true
 - 参考演示： https://huggingface.co/spaces/kira4424/VITS-fast-fine-tuning
 ## Install
 
-```
+```ts
 pyenv virtualenv 3.10.6 vits
 pyenv activate vits
 git clone https://github.com/Plachtaa/VITS-fast-fine-tuning.git
@@ -20,13 +20,15 @@ pip install -r requirements.txt
 pip install torch==2.1.0 torchvision==0.16.0 torchaudio==2.1.0 --index-url https://download.pytorch.org/whl/cu118
 
 ```
-```
+
+```ts
 Uninstalling torchaudio-2.1.0:
 Successfully uninstalled torchaudio-2.1.0
 Successfully installed cmake-3.25.0 lit-15.0.7 torch-2.0.0+cu118 torchaudio-2.0.1+cu118 torchvision-0.15.1+cu118 triton-2.0.0
 
 ```
-```
+
+```ts
 cp exam1.c /usr/ wang/
 python scripts/video2audio.py python scripts/denoise_audio
 python scripts/long_audio_transcribe.py --languages "{C}" --whisper_size large
@@ -35,7 +37,7 @@ python scripts/resample.pypython preprocess_v2.py --languages "{C}"
 
 ```
 
-```
+```ts
 python finetune_speaker_v2.py -m ./OUTPUT_MODEL --max_epochs "{3000}" --drop_speaker_embed True
 tensorboard --logdir=./OUTPUT_MODEL
 cp ./configs/modified_finetune_speaker.json ./finetune_speaker.json
