@@ -36,4 +36,15 @@ source ~/.bashrc
 #### 参考安装教程官方：
 https://github.com/numz/sd-wav2lip-uhq/blob/main/README_CN.md#-%E5%AE%89%E8%A3%85%E8%AF%B4%E6%98%8E
 
+#### 报错信息处理
 
+来到“已安装”标签，点击“应用并重启用户界面”出现报错信息。
+看起来你遇到了一个关于 PyTorch 和 TorchAudio CUDA 版本不匹配的问题。错误信息显示 PyTorch 使用 CUDA 版本 11.8，而 TorchAudio
+ 使用 CUDA 版本 11.7。为了解决这个问题，你可以尝试以下几个步骤：
+更新 TorchAudio： 确保你的 TorchAudio 版本与你的 PyTorch 版本兼容。在你的 diffuenv 虚拟环境中运行以下命令：
+
+这里经过验证使用最新版本
+##### CUDA 11.8版本下安装信息
+```ts
+pip install torch==2.1.0 torchvision==0.16.0 torchaudio==2.1.0 --index-url https://download.pytorch.org/whl/cu118
+```
