@@ -33,33 +33,90 @@ apt install ffmpeg
 ```
 检查版本：
 
-![Planetfall Logo](https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEipKfGqAquKFJitxUdT9UiqTUlpb
-KdnALyfnZCq3zBlIdv8qkaP_GWbgIOHeAc3lcvF_q22S_2wy88NjPLtCeXRpQ0FYQMUVIPsmR6IUckQeXpPYG
-bUkERdO0nXXZNDO5mpPucjr8s3OWmUMDD942-0vCOd9zOtCWWcKeIiPFF8HxGL0IzeATpzSdxVl8Y/w640-h22
-6-rw/1708224192960.jpg)
+![Planetfall Logo](https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEipKfGqAquKFJitxUdT9UiqTUlpbKdnALyfnZCq3zBlIdv8qkaP_GWbgIOHeAc3lcvF_q22S_2wy88NjPLtCeXRpQ0FYQMUVIPsmR6IUckQeXpPYGbUkERdO0nXXZNDO5mpPucjr8s3OWmUMDD942-0vCOd9zOtCWWcKeIiPFF8HxGL0IzeATpzSdxVl8Y/w640-h226-rw/1708224192960.jpg)
 
 
 
 ### 创建的python 环境虚拟环境，方便后续更新环境
 
-
-
-
-
-
-
-
-
-#### 报错信息处理
-
-来到“已安装”标签，点击“应用并重启用户界面”出现报错信息。
-![Planetfall Logo](https://blogger.googleusercontent.com/img/a/AVvXsEg9MF_lbRc31mupDa9jr50fPew_FlgDsxgk-OF0B3FRD7GuhfNJrm0XRj6KDA3ANSu4swNN0n0fWn2EfT5UHwbvlu9x8n4pGzhj5CuFy5o0_CEQsVg-OCzVhh1_Cc41o4Uq_5fiR5a-eLAy1CqzSzCeZ4T-8f3ZzszNpJ-w6dLg-JBhvJsfRFhtrqnUv4k=w640-h136-rw)
-看起来你遇到了一个关于 PyTorch 和 TorchAudio CUDA 版本不匹配的问题。错误信息显示 PyTorch 使用 CUDA 版本 11.8，而 TorchAudio
- 使用 CUDA 版本 11.7。为了解决这个问题，你可以尝试以下几个步骤：
-更新 TorchAudio： 确保你的 TorchAudio 版本与你的 PyTorch 版本兼容。在你的 diffuenv 虚拟环境中运行以下命令：
-
-这里经过验证使用最新版本
-##### CUDA 11.8版本下安装信息
+1.查看目前python版本 
 ```ts
-pip install torch==2.1.0 torchvision==0.16.0 torchaudio==2.1.0 --index-url https://download.pytorch.org/whl/cu118
+pyenv version
 ```
+
+2.创建在3.10.6 下的虚拟环境
+```ts
+pyenv virtualenv 3.10.6 face-env
+```
+
+
+3.激活虚拟环境
+```ts
+pyenv activate face-env
+```
+
+####  CUDA 安装以及cuDNN安装，安装过程参考
+
+1. CUDA Toolkit 11.8 Downloads 安装官方教程  
+
+https://developer.nvidia.com/cuda-11-8-0-download-archive?target_os=Linux&target_arch=x86_64&Distribution=Ubuntu&target_version=18.04&target_type=deb_local
+
+2.cuDNN安装教程
+
+https://docs.nvidia.com/deeplearning/cudnn/install-guide/index.html#package-manager-ubuntu-install
+
+3. 安装之后的使用 nvidia-smi 查看英伟达驱动 
+```ts
+root@VM-84-133-ubuntu:/home/ubuntu# nvidia-smi
+```
+![Planetfall Logo](https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEi1t5EtFDtX2_cWJahDBgADy4RPoxr39m1aphijQUwt2cs7b-KxUM_u1uZ4vGM0YfeTPQOaY_QQlFvSE37gOCTMz-Uwvra6agANg5cz_J-gbH32izUYF_PNcgK7fSPyrIcGK4derNrXo1w_w6NtDIkJYXpyJg5xgiFcZtKBtxgTyP4U5hrrjkhHMTJaus8/w640-h340-rw/WX20231014-012341.png)
+
+4.安装之后的查看cuDNN版本是否安装成功
+```ts
+root@VM-84-133-ubuntu:/home/sduser# dpkg -l | grep cudnn
+```
+![Planetfall Logo](https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEjCVuiqrNSmCPfOoabg4PDX7re1gHgCfFHIYNzVnFHYXR_Eal05bukGw_qQvn3W0hwnwNsiIvVmLcthkPL9tGKzspLdgdJXF1QnjlouL2g6W1uJg_fiPAZLEyJ8i9PKGHqlI535U5ZVI-22W6cB6iskXCSfE2UmnJam_PiSYm4t46nNh0Xg3WXJ78lEmaY/w640-h40-rw/WX20231014-012411.png)
+
+### 安装软件程序包
+
+1. Clone Repository
+
+git clone https://github.com/facefusion/facefusion.git
+
+2. Install dependencies
+
+We highly recommend to work with a venv or conda to avoid issues.
+```ts
+pip install -r requirements.txt
+```
+
+3. Done
+
+You should be able to run roop using python run.py command. Keep in mind that while running the program for first time, it will download some models which can take time depending on your network connection.
+
+
+##### 重要信息，有些用户安装之后没有GPU 选项原因可能如下：
+
+1. Please don't upgrade the onnxruntime to a version other than defined in the requirements.txt file.
+
+2. 更新pip list 同时安装  
+```ts
+pip install onnxruntime-gpu==1.16.0
+```
+
+3.执行命令 
+```ts
+python run.py --execution-provider cuda
+```
+![Planetfall Logo](https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEhaWEWtHbPgxw1mSvGyiHSLbDsPpBDRt9vpLdHcV-MHJE1Mr2-2vUU8bx2gn8PQVGLce2AZ4rq2Kn78q8l0N5a-7KabuF1KjbIdlRXLLX_UkmXqC3BjGqqFZTS2rjb607ACnvBOZ7z5TNU2NUdN_y2vqtm_2A3Hff9XkeuX-vMa9M9CEWRUk4kaC8BryGg/w640-h466-rw/WX20231014-032246.png)
+
+##### 重要信息，更新torch与cuda 以及驱动版本匹配：
+参考链接：
+https://blog.csdn.net/qq_40502460/article/details/116309159
+![Planetfall Logo](https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEgU3YXr_qVTdQcGqZb5RNGCpRrOOv2eLrFOq7gIPklVNTr6OKoRp6yEF4bsXojSEVx1BCl4QW2x9rGcjSVh8GNgc4Vz0lvbsxmN7i3i97aUYlVd7LaTX-tt5VUu5pDqp-5cv57gs6VsB42WgTY4WWxaycVhpY8VoOUFG_jtXEAIenLohXZzfe5ggHDAHvo/w640-h452-rw/WX20231024-004611.png)
+
+
+
+```ts
+```
+![Planetfall Logo](https://blogger.googleus/preview.png)
