@@ -16,9 +16,9 @@ Linux平台环境安装脚本 参考： https://docs.facefusion.io/installation/
 
 python的检查，如果不是Python 3.10 版本建议首先安装的python ，建议使用的python 管理工具安装，使用root 账号权限进行安装，在后续程序安装之中使用虚拟环境，保障新安装的程序与现有的程序环境不冲突。
 
-1. ubunttu 安装pyenv 可参考之前博文， https://seealso1884.blogspot.com/2023/10/ubuntupyenv.html
+1.ubunttu 安装pyenv 可参考之前博文， https://seealso1884.blogspot.com/2023/10/ubuntupyenv.html
 
-2. 安装pip / git / curl / ffmpeg  等组件
+2.安装pip / git / curl / ffmpeg  等组件
 
 可以参考：https://seealso1884.blogspot.com/2023/12/ubuntu-ffmpeg.html
 
@@ -57,7 +57,7 @@ pyenv activate face-env
 
 ####  CUDA 安装以及cuDNN安装，安装过程参考
 
-1. CUDA Toolkit 11.8 Downloads 安装官方教程  
+1.CUDA Toolkit 11.8 Downloads 安装官方教程  
 
 https://developer.nvidia.com/cuda-11-8-0-download-archive?target_os=Linux&target_arch=x86_64&Distribution=Ubuntu&target_version=18.04&target_type=deb_local
 
@@ -65,7 +65,7 @@ https://developer.nvidia.com/cuda-11-8-0-download-archive?target_os=Linux&target
 
 https://docs.nvidia.com/deeplearning/cudnn/install-guide/index.html#package-manager-ubuntu-install
 
-3. 安装之后的使用 nvidia-smi 查看英伟达驱动 
+3.安装之后的使用 nvidia-smi 查看英伟达驱动 
 ```ts
 root@VM-84-133-ubuntu:/home/ubuntu# nvidia-smi
 ```
@@ -79,27 +79,27 @@ root@VM-84-133-ubuntu:/home/sduser# dpkg -l | grep cudnn
 
 ### 安装软件程序包
 
-1. Clone Repository
+1.Clone Repository
 
 git clone https://github.com/facefusion/facefusion.git
 
-2. Install dependencies
+2.Install dependencies
 
 We highly recommend to work with a venv or conda to avoid issues.
 ```ts
 pip install -r requirements.txt
 ```
 
-3. Done
+3.Done
 
 You should be able to run roop using python run.py command. Keep in mind that while running the program for first time, it will download some models which can take time depending on your network connection.
 
 
 ##### 重要信息，有些用户安装之后没有GPU 选项原因可能如下：
 
-1. Please don't upgrade the onnxruntime to a version other than defined in the requirements.txt file.
+1.Please don't upgrade the onnxruntime to a version other than defined in the requirements.txt file.
 
-2. 更新pip list 同时安装  
+2.更新pip list 同时安装  
 ```ts
 pip install onnxruntime-gpu==1.16.0
 ```
@@ -117,6 +117,3 @@ https://blog.csdn.net/qq_40502460/article/details/116309159
 
 
 
-```ts
-```
-![Planetfall Logo](https://blogger.googleus/preview.png)
