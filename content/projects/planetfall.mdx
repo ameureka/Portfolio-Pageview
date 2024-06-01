@@ -1,16 +1,65 @@
 ---
-title: planetfall.io
-description: I'm building a SAAS providing global latency monitoring for your APIs and websites from edge locations around the world. Have you ever wondered how fast your API is in any part of the world? Planetfall allows you to find out and monitor it continuously.
+title: facefusion使用指导
+description: 安装python、CUDA 安装以及cuDNN安装
 date: "2023-04-01"
-url: https://planetfall.io
 published: true
   
 ---
+![Planetfall Logo](https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEims_d_U9FoR1JS5ZM7WceRtkNLUgHHbpQQ6iTSYvuJ3eFR3gVG7971JcE-HZEz0ap1Bzg8wOkLf43k3AczMYFqBLsiYBe2c6Op0WO6sPZdTU2yd7KETC92eWj_qNUCukvnLtQ-3y02yzliZ8p9-QV13aN7HjUSq9rqjcKO7aqYDvgGUnuIDS2hgCudTF0/w640-h560-rw/preview.png)
+
+###  facefusion 安装指导教程
+
+Linux平台环境安装脚本 参考： https://docs.facefusion.io/installation/platform/linux
 
 
-[![](/planetfall.png)](https://planetfall.io)
-![Planetfall Logo](/planetfall.png)
+### 检查现有的python环境，安装python
 
-Planetfall is a SaaS platform that provides global latency monitoring and synthetic monitoring for APIs. With over 60 regions to monitor from, customers can gain insights into the true performance of their API by checking latency from around the world. 
-Planetfall offers custom timeouts, threshold notifications, and real-time alerts for potential performance issues. Additionally, customers can create custom status pages to share with their customers, which can display availability and latency for every region. Planetfall offers a free tier that includes 100k checks per month and scales as customers grow. Overall, Planetfall helps customers stay in control of their API's performance, improve communication with their customers, and build trust.
+python的检查，如果不是Python 3.10 版本建议首先安装的python ，建议使用的python 管理工具安装，使用root 账号权限进行安装，在后续程序安装之中使用虚拟环境，保障新安装的程序与现有的程序环境不冲突。
 
+1. ubunttu 安装pyenv 可参考之前博文， https://seealso1884.blogspot.com/2023/10/ubuntupyenv.html
+
+2. 安装pip / git / curl / ffmpeg  等组件
+
+可以参考：https://seealso1884.blogspot.com/2023/12/ubuntu-ffmpeg.html
+
+```ts
+apt install python3-pip
+
+apt install git-all
+
+apt install curl
+
+apt install ffmpeg
+```
+检查版本：
+
+![Planetfall Logo](https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEipKfGqAquKFJitxUdT9UiqTUlpb
+KdnALyfnZCq3zBlIdv8qkaP_GWbgIOHeAc3lcvF_q22S_2wy88NjPLtCeXRpQ0FYQMUVIPsmR6IUckQeXpPYG
+bUkERdO0nXXZNDO5mpPucjr8s3OWmUMDD942-0vCOd9zOtCWWcKeIiPFF8HxGL0IzeATpzSdxVl8Y/w640-h22
+6-rw/1708224192960.jpg)
+
+
+
+### 创建的python 环境虚拟环境，方便后续更新环境
+
+
+
+
+
+
+
+
+
+#### 报错信息处理
+
+来到“已安装”标签，点击“应用并重启用户界面”出现报错信息。
+![Planetfall Logo](https://blogger.googleusercontent.com/img/a/AVvXsEg9MF_lbRc31mupDa9jr50fPew_FlgDsxgk-OF0B3FRD7GuhfNJrm0XRj6KDA3ANSu4swNN0n0fWn2EfT5UHwbvlu9x8n4pGzhj5CuFy5o0_CEQsVg-OCzVhh1_Cc41o4Uq_5fiR5a-eLAy1CqzSzCeZ4T-8f3ZzszNpJ-w6dLg-JBhvJsfRFhtrqnUv4k=w640-h136-rw)
+看起来你遇到了一个关于 PyTorch 和 TorchAudio CUDA 版本不匹配的问题。错误信息显示 PyTorch 使用 CUDA 版本 11.8，而 TorchAudio
+ 使用 CUDA 版本 11.7。为了解决这个问题，你可以尝试以下几个步骤：
+更新 TorchAudio： 确保你的 TorchAudio 版本与你的 PyTorch 版本兼容。在你的 diffuenv 虚拟环境中运行以下命令：
+
+这里经过验证使用最新版本
+##### CUDA 11.8版本下安装信息
+```ts
+pip install torch==2.1.0 torchvision==0.16.0 torchaudio==2.1.0 --index-url https://download.pytorch.org/whl/cu118
+```
